@@ -459,7 +459,7 @@ let PROJECTS = [
 // ════════════════════════════════════════════════
 // JSONBIN CONFIG — replace with your credentials
 // ════════════════════════════════════════════════
-var BIN_ID  = 'PASTE_YOUR_NEW_BIN_ID_HERE';
+var BIN_ID  = '69dfd842856a68218939fb68';
 var API_KEY = '$2a$10$CYBsfBEtDArtHF/.GLAFG.ijVKYwl0jed/Eqelj4gIBsPjfIwf8Qq';
 var BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
 
@@ -492,7 +492,7 @@ function lsLoad() {
 }
 
 async function jbLoad() {
-  if (BIN_ID === 'PASTE_YOUR_NEW_BIN_ID_HERE') {
+  if (BIN_ID === 'UNCONFIGURED') {
     lsLoad();
     setSyncUI('error', '⚠ JSONBin not configured — using local storage. Add your Bin ID & API Key in the script.');
     return;
@@ -523,7 +523,7 @@ async function jbLoad() {
 
 async function jbSave() {
   lsSave();
-  if (BIN_ID === 'PASTE_YOUR_NEW_BIN_ID_HERE') {
+  if (BIN_ID === 'UNCONFIGURED') {
     setSyncUI('error', '⚠ Not synced — JSONBin credentials not set');
     return;
   }
