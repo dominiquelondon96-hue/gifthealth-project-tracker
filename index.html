@@ -698,9 +698,9 @@ tbody tr{animation:fadeUp .2s ease both}
             <label>Service ID <span style="font-weight:400;font-size:9px;color:#10b981">✓ pre-filled</span></label>
             <input id="ejs-service-id" value="service_fgowsma" style="color:var(--muted);font-size:11px">
           </div>
-          <div class="ff" style="border:2px solid var(--purple);border-radius:10px;padding:8px">
-            <label style="color:var(--purple)">⭐ Your Work Email (From)</label>
-            <input id="ejs-from-email" type="email" placeholder="dom.london@gifthealth.com" style="font-weight:700">
+          <div class="ff" style="border:2px solid #10b981;border-radius:10px;padding:8px">
+            <label style="color:#166534">✅ Your Work Email (From)</label>
+            <input id="ejs-from-email" type="email" value="dominique.l@gifthealth.com" style="font-weight:700;color:var(--text)" readonly>
           </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
@@ -2438,7 +2438,7 @@ document.addEventListener('mousemove',function(e){
 var EJS={
   publicKey:'_3N-HEbcSUx58VAWn',
   serviceId:'service_fgowsma',
-  fromEmail:'',       // user fills in their work email
+  fromEmail:'dominique.l@gifthealth.com',       // sender email
   enabled:false,      // becomes true once user saves with their email
   templateId:'template_kd4kons',   // Template 1: bi-weekly check-in (Mon @ 12pm)
   template3Id:'template_sosw7rp',  // Template 3: overdue alert (day after due date)
@@ -2458,13 +2458,11 @@ function loadEmailJSConfig(){
       EJS={...EJS,...parsed};
     }
   }catch(e){}
-  // Always init with pre-filled keys — only need email to fully enable
+  // All credentials pre-filled — auto-init and enable
   try{
-    if(EJS.publicKey&&EJS.serviceId&&EJS.templateId){
-      emailjs.init(EJS.publicKey);
-      if(EJS.fromEmail) EJS.enabled=true;
-    }
-  }catch(e){}
+    emailjs.init(EJS.publicKey);
+    EJS.enabled=true;
+  }catch(e){ console.warn('EmailJS init failed:',e); }
   updateEJSBanner();
   if(EJS.enabled) runScheduledEmails();
 }
@@ -2475,14 +2473,14 @@ function saveEmailJSConfig(){
   EJS.serviceId   = document.getElementById('ejs-service-id').value.trim()||EJS.serviceId;
   EJS.templateId  = document.getElementById('ejs-template-id').value.trim()||EJS.templateId;
   EJS.template3Id = document.getElementById('ejs-template3-id').value.trim()||EJS.template3Id;
-  EJS.fromEmail   = document.getElementById('ejs-from-email').value.trim();
+  EJS.fromEmail   = document.getElementById('ejs-from-email').value.trim()||'dominique.l@gifthealth.com';
   EJS.anchorDate  = document.getElementById('ejs-anchor-date').value||'2026-04-20';
   EJS.checkinDay  = parseInt(document.getElementById('ejs-checkin-day').value)||1;
   EJS.checkinTime = parseInt(document.getElementById('ejs-checkin-time').value)||12;
   EJS.alertDay    = 0;  // follow-up disabled
 
-  if(!EJS.fromEmail){
-    document.getElementById('ejs-status').innerHTML='<span style="color:#ef4444">⚠ Please enter your work email address</span>';
+  if(!EJS.publicKey||!EJS.serviceId||!EJS.templateId){
+    document.getElementById('ejs-status').innerHTML='<span style="color:#ef4444">⚠ Missing credentials</span>';
     return;
   }
   try{
