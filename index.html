@@ -810,8 +810,13 @@ Please open the tracker and either:
 
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
         <button onclick="saveEmailJSConfig()" class="btn-pri">💾 Save &amp; Enable</button>
-        <button onclick="sendTestEmail()" class="btn-sec" style="border-radius:20px">📧 Send Test Email</button>
-        <div id="ejs-status" style="font-size:11px;font-weight:700"></div>
+        <button onclick="sendTestEmail()" class="btn-sec" style="border-radius:20px">📧 Send Test to Me</button>
+        <button onclick="sendTestBatch()" class="btn-sec" style="border-radius:20px;border-color:var(--orange);color:var(--orange)">📨 Send Test to All Owners</button>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:10px;width:100%">
+          <input id="ejs-test-email" type="email" placeholder="Send test to specific email…" style="flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:20px;font-family:inherit;font-size:12px;max-width:280px">
+          <button onclick="sendTestToSpecific()" class="btn-sec" style="border-radius:20px;white-space:nowrap">📧 Send to This Email</button>
+        </div>
+        <div id="ejs-status" style="font-size:11px;font-weight:700;margin-top:6px"></div>
       </div>
     </div>
   </div>
@@ -2501,19 +2506,93 @@ function sendTestEmail(){
   if(!EJS.enabled) return;
   emailjs.send(EJS.serviceId, EJS.templateId,{
     to_email: EJS.fromEmail,
-    to_name: 'gifthealth Team',
-    from_name: EJS.fromEmail.split('@')[0]||'Dom London',
+    to_name: 'Dominique',
+    from_name: 'Dominique L | gifthealth Operations',
     project_name: 'TEST — gifthealth Project Tracker',
     project_id: 'TEST',
     current_status: 'In Progress',
     current_pct: '50%',
     workstream: 'Tech & Engineering',
     due_date: '05/30/26',
-    alert_reason: 'This is a test alert',
     tracker_url: window.location.href,
-    message: 'This is a test confirming your EmailJS setup is working correctly. Both templates are now active.'
+    message: 'This is a test confirming your EmailJS setup is working correctly.'
   }).then(()=>showToast('✅ Test email sent to '+EJS.fromEmail))
-    .catch(e=>showToast('❌ Test failed — check credentials: '+(e.text||e.message||'unknown error')));
+    .catch(e=>showToast('❌ Test failed: '+(e.text||e.message||'unknown error')));
+}
+
+function sendTestBatch(){
+  if(!EJS.enabled){ showToast('⚠ EmailJS not enabled'); return; }
+  const targets=PROJECTS.filter(p=>!p.isSubtask&&p.status!=='Done'&&p.ownerEmail);
+  if(!targets.length){
+    showToast('⚠ No owner emails on file — add them in the Directory or Admin tab first');
+    return;
+  }
+  if(!confirm(`Send a test check-in email to ${targets.length} owner${targets.length>1?'s':''} with emails on file?\n\nThis is a one-time test — it won\'t affect the bi-weekly schedule.`)) return;
+
+  let sent=0, failed=0;
+  const pageUrl=window.location.href;
+
+  targets.forEach((p,i)=>{
+    setTimeout(()=>{
+      emailjs.send(EJS.serviceId, EJS.templateId,{
+        to_email: p.ownerEmail,
+        to_name: p.owner||'Team Member',
+        from_name: 'Dominique L | gifthealth Operations',
+        project_name: p.name,
+        project_id: p.id,
+        current_status: p.status,
+        current_pct: p.pct+'%',
+        workstream: p.workstream,
+        due_date: p.due||'TBD',
+        tracker_url: pageUrl,
+        message: 'This is a test email from the gifthealth Project Tracker confirming your email is set up correctly for bi-weekly check-in emails starting April 20.'
+      }).then(()=>{
+        sent++;
+        auditLog(p.id,p.name,'checkin','email','—',`Test batch email sent to ${p.ownerEmail}`);
+        if(sent+failed===targets.length){
+          save();
+          showToast(`✅ Test batch complete — ${sent} sent${failed>0?', '+failed+' failed':''}`);
+          renderCheckins();
+        }
+      }).catch(err=>{
+        failed++;
+        console.error('Test batch failed for',p.owner,err);
+        if(sent+failed===targets.length){
+          showToast(`⚠ Batch done — ${sent} sent, ${failed} failed`);
+        }
+      });
+    }, i*800);
+  });
+
+  showToast(`📨 Sending test emails to ${targets.length} owner${targets.length>1?'s':''}…`);
+}
+
+function sendTestToSpecific(){
+  if(!EJS.enabled){ showToast('⚠ EmailJS not enabled'); return; }
+  const email=document.getElementById('ejs-test-email').value.trim();
+  if(!email){ showToast('⚠ Enter an email address first'); return; }
+  const name=email.split('@')[0];
+  document.getElementById('ejs-status').innerHTML='<span style="color:var(--muted)">⏳ Sending…</span>';
+  emailjs.send(EJS.serviceId, EJS.templateId,{
+    to_email: email,
+    to_name: name,
+    from_name: 'Dominique L | gifthealth Operations',
+    project_name: 'Sample Project — gifthealth Tracker',
+    project_id: '1',
+    current_status: 'In Progress',
+    current_pct: '50%',
+    workstream: 'Tech & Engineering',
+    due_date: '05/30/26',
+    tracker_url: window.location.href,
+    message: 'This is a test email from the gifthealth Project Tracker. You\'ll receive bi-weekly check-ins like this for any projects you\'re assigned to.'
+  }).then(()=>{
+    document.getElementById('ejs-status').innerHTML=`<span style="color:#10b981;font-weight:700">✅ Test email sent to ${esc(email)}</span>`;
+    document.getElementById('ejs-test-email').value='';
+    showToast('✅ Test sent to '+email);
+  }).catch(e=>{
+    document.getElementById('ejs-status').innerHTML=`<span style="color:#ef4444">❌ Failed: ${e.text||e.message||'unknown error'}</span>`;
+    showToast('❌ Send failed');
+  });
 }
 
 function toggleEmailJSSetup(){
