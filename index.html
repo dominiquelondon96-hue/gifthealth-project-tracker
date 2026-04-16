@@ -236,8 +236,8 @@ tbody tr:hover .row-actions{opacity:1}
 /* EmailJS status indicator */
 .ejs-active{background:#d1fae5;color:#065f46;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
 .ejs-inactive{background:#fde8e8;color:#9b1c1c;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
-.checkin-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;transition:box-shadow .15s}
-.checkin-card:hover{box-shadow:0 2px 12px rgba(68,11,57,.1)}
+.checkin-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;transition:box-shadow .15s}
+.checkin-card:hover{box-shadow:0 4px 16px rgba(68,11,57,.1)}
 .checkin-info{flex:1;min-width:200px}
 .checkin-name{font-size:13px;font-weight:700;color:var(--text)}
 .checkin-meta{font-size:11px;color:var(--muted);margin-top:3px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -269,7 +269,6 @@ tbody tr:hover .row-actions{opacity:1}
 .dir-title{font-size:11px;color:var(--muted);margin-bottom:8px}
 .dir-email{font-size:11px;color:var(--purple);font-weight:600;display:flex;align-items:center;gap:5px;margin-bottom:4px;word-break:break-all}
 .dir-team{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--beige);color:var(--muted);display:inline-block;margin-bottom:10px}
-.dir-role-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;display:inline-block}
 .dir-projects{font-size:10px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
 .dir-actions{display:flex;gap:6px;margin-top:10px;opacity:0;transition:opacity .15s}
 .dir-card:hover .dir-actions{opacity:1}
@@ -324,7 +323,7 @@ tbody tr{animation:fadeUp .2s ease both}
   <button class="nav-tab active" onclick="switchTab('tracker',this)">📋 Tracker <span class="tab-count" id="tc-tracker">—</span></button>
   <button class="nav-tab" onclick="switchTab('dashboard',this)">📊 Dashboard</button>
   <button class="nav-tab" onclick="switchTab('archive',this)">🗃️ Archive <span class="tab-count" id="tc-archive" style="background:#10b981">—</span></button>
-  <button class="nav-tab" onclick="switchTab('checkin',this)">📧 Check-ins</button>
+  <button class="nav-tab" onclick="switchTab('checkin',this)">📬 Email Status</button>
   <button class="nav-tab" onclick="switchTab('directory',this)">👥 Directory <span class="tab-count" id="tc-directory" style="background:#0369a1">—</span></button>
   <button class="nav-tab admin-tab" onclick="switchTab('admin',this)">⚙️ Admin <span class="tab-count" id="tc-admin">—</span></button>
   <button class="nav-tab" onclick="switchTab('settings',this)">🎛️ Settings</button>
@@ -560,9 +559,6 @@ tbody tr{animation:fadeUp .2s ease both}
       <input type="text" id="dir-search" placeholder="Search name, email, role, team…" oninput="renderDirectory()">
     </div>
     <button class="fbtn on" id="dir-filter-all" onclick="setDirFilter('all',this)">All</button>
-    <button class="fbtn" onclick="setDirFilter('Owner',this)">Owner</button>
-    <button class="fbtn" onclick="setDirFilter('Co-owner',this)">Co-owner</button>
-    <button class="fbtn" onclick="setDirFilter('Sponsor',this)">Sponsor</button>
     <select class="fsel" id="dir-team-filter" onchange="renderDirectory()">
       <option value="">All Teams</option>
     </select>
@@ -605,15 +601,6 @@ tbody tr{animation:fadeUp .2s ease both}
           <label>Team / Department</label>
           <input id="dp-team" placeholder="e.g. Clinical Operations" list="dp-team-list">
           <datalist id="dp-team-list"></datalist>
-        </div>
-        <div class="ff">
-          <label>Role in Projects</label>
-          <select id="dp-role">
-            <option>Owner</option>
-            <option>Co-owner</option>
-            <option>Sponsor</option>
-            <option>Owner &amp; Sponsor</option>
-          </select>
         </div>
         <div class="ff">
           <label>Avatar Color</label>
@@ -663,15 +650,15 @@ tbody tr{animation:fadeUp .2s ease both}
 <!-- CHECK-INS -->
 <div class="page" id="page-checkin">
   <div style="padding:20px 32px;background:var(--white);border-bottom:1px solid var(--border)">
-    <div style="font-size:15px;font-weight:800;color:var(--text)">📧 Project Check-ins</div>
-    <div style="font-size:11px;color:var(--muted);margin-top:2px">Automated email delivery via EmailJS — no server required</div>
+    <div style="font-size:15px;font-weight:800;color:var(--text)">📬 Email Status</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:2px">Track when each project owner was last contacted — automated emails send bi-weekly via the schedule in EmailJS</div>
   </div>
 
   <!-- EmailJS Config Banner -->
   <div id="emailjs-config-banner" style="background:linear-gradient(135deg,var(--purple-xd),var(--purple));color:#fff;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
     <div>
       <div style="font-size:12px;font-weight:800;margin-bottom:2px">⚡ EmailJS Setup Required for Automated Sending</div>
-      <div style="font-size:11px;opacity:.75">Free at emailjs.com · Takes 5 minutes · No server or coding needed</div>
+      <div style="font-size:11px;opacity:.75">Free at emailjs.com · Bi-weekly check-ins + overdue alerts sent automatically from your work email</div>
     </div>
     <button onclick="toggleEmailJSSetup()" style="padding:7px 16px;border-radius:20px;border:1.5px solid rgba(255,255,255,.5);background:transparent;color:#fff;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer" id="emailjs-setup-toggle-btn">⚙️ Configure EmailJS</button>
   </div>
@@ -683,7 +670,7 @@ tbody tr{animation:fadeUp .2s ease both}
       <div style="font-size:11px;color:var(--muted);margin-bottom:16px">Emails send directly from your work email address (e.g. dom.london@gifthealth.com) — no IT approval needed, no new accounts for recipients</div>
 
       <!-- Step cards -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:20px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px">
         <div style="background:var(--white);border-radius:10px;padding:12px;border:1px solid var(--border)">
           <div style="font-size:10px;font-weight:800;color:var(--purple);margin-bottom:5px">① Create Account</div>
           <div style="font-size:10px;color:var(--muted);line-height:1.5">Go to <strong>emailjs.com</strong> → Sign up free → 200 emails/month free</div>
@@ -693,37 +680,40 @@ tbody tr{animation:fadeUp .2s ease both}
           <div style="font-size:10px;color:var(--muted);line-height:1.5"><strong>Email Services → Add New</strong> → Choose <strong>Gmail</strong> or <strong>Outlook/Office 365</strong> → Sign in with your work email → Copy <strong>Service ID</strong></div>
         </div>
         <div style="background:var(--white);border-radius:10px;padding:12px;border:1px solid var(--border)">
-          <div style="font-size:10px;font-weight:800;color:var(--purple);margin-bottom:5px">③ Create Template 1</div>
-          <div style="font-size:10px;color:var(--muted);line-height:1.5"><strong>Weekly check-in:</strong> Templates → New → paste the template below → Copy <strong>Template ID 1</strong></div>
-        </div>
-        <div style="background:var(--white);border-radius:10px;padding:12px;border:1px solid var(--border)">
-          <div style="font-size:10px;font-weight:800;color:var(--purple);margin-bottom:5px">④ Create Template 2</div>
-          <div style="font-size:10px;color:var(--muted);line-height:1.5"><strong>Overdue alert:</strong> Templates → New → paste the alert template below → Copy <strong>Template ID 2</strong></div>
+          <div style="font-size:10px;font-weight:800;color:var(--purple);margin-bottom:5px">③ Enter Your Email Below</div>
+          <div style="font-size:10px;color:var(--muted);line-height:1.5">All credentials are pre-configured. Just enter your work email address and click <strong>Save &amp; Enable</strong></div>
         </div>
       </div>
 
       <!-- Credential inputs -->
       <div style="background:var(--white);border-radius:12px;padding:16px;border:1px solid var(--border);margin-bottom:16px">
-        <div style="font-size:11px;font-weight:800;color:var(--text);margin-bottom:12px">Your EmailJS Credentials</div>
+        <div style="font-size:11px;font-weight:800;color:var(--text);margin-bottom:4px">✅ EmailJS Already Configured</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Service ID, Public Key, and both template IDs are pre-loaded. You just need to enter your work email to activate.</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
-          <div class="ff"><label>Public Key</label><input id="ejs-public-key" placeholder="e.g. aBcDeFgHiJkLm_XyZ"></div>
-          <div class="ff"><label>Service ID</label><input id="ejs-service-id" placeholder="e.g. service_abc123"></div>
-          <div class="ff"><label>Your Work Email (From)</label><input id="ejs-from-email" type="email" placeholder="dom.london@gifthealth.com"></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
           <div class="ff">
-            <label>Template 1 ID — Bi-weekly Check-in <span style="font-weight:400;font-size:9px;color:var(--muted)">(Mon @ 12pm)</span></label>
-            <input id="ejs-template-id" placeholder="e.g. template_checkin123">
+            <label>Public Key <span style="font-weight:400;font-size:9px;color:#10b981">✓ pre-filled</span></label>
+            <input id="ejs-public-key" value="_3N-HEbcSUx58VAWn" style="color:var(--muted);font-size:11px">
           </div>
           <div class="ff">
-            <label>Template 2 ID — Follow-up <span style="font-weight:400;font-size:9px;color:var(--muted)">(Tue @ 9am)</span></label>
-            <input id="ejs-template2-id" placeholder="e.g. template_followup456">
+            <label>Service ID <span style="font-weight:400;font-size:9px;color:#10b981">✓ pre-filled</span></label>
+            <input id="ejs-service-id" value="service_fgowsma" style="color:var(--muted);font-size:11px">
           </div>
-          <div class="ff">
-            <label>Template 3 ID — Overdue Alert <span style="font-weight:400;font-size:9px;color:#ef4444">(day after due date)</span></label>
-            <input id="ejs-template3-id" placeholder="e.g. template_overdue789">
+          <div class="ff" style="border:2px solid var(--purple);border-radius:10px;padding:8px">
+            <label style="color:var(--purple)">⭐ Your Work Email (From)</label>
+            <input id="ejs-from-email" type="email" placeholder="dom.london@gifthealth.com" style="font-weight:700">
           </div>
         </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="ff">
+            <label>Template 1 — Bi-weekly Check-in <span style="font-weight:400;font-size:9px;color:#10b981">✓ pre-filled</span></label>
+            <input id="ejs-template-id" value="template_kd4kons" style="color:var(--muted);font-size:11px">
+          </div>
+          <div class="ff">
+            <label>Template 3 — Overdue Alert <span style="font-weight:400;font-size:9px;color:#10b981">✓ pre-filled</span></label>
+            <input id="ejs-template3-id" value="template_sosw7rp" style="color:var(--muted);font-size:11px">
+          </div>
+        </div>
+
       </div>
 
       <!-- Schedule settings -->
@@ -759,41 +749,9 @@ tbody tr{animation:fadeUp .2s ease both}
             </select>
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
-          <div class="ff">
-            <label>📩 Follow-up Day (Template 2)</label>
-            <select id="ejs-alert-day">
-              <option value="">Disabled</option>
-              <option value="1">Monday</option>
-              <option value="2" selected>Tuesday — 9:00 AM EST</option>
-              <option value="3">Wednesday</option>
-              <option value="4">Thursday</option>
-              <option value="5">Friday</option>
-            </select>
-          </div>
-          <div class="ff">
-            <label>Follow-up Time (EST)</label>
-            <select id="ejs-alert-time">
-              <option value="8">8:00 AM</option>
-              <option value="9" selected>9:00 AM</option>
-              <option value="10">10:00 AM</option>
-              <option value="12">12:00 PM</option>
-            </select>
-          </div>
-          <div class="ff">
-            <label>Follow-up Filter</label>
-            <select id="ejs-alert-filter">
-              <option value="all" selected>All active projects</option>
-              <option value="both">Overdue + Blocked only</option>
-              <option value="overdue">Overdue only</option>
-              <option value="blocked">Blocked only</option>
-            </select>
-          </div>
-        </div>
         <div style="margin-top:12px;padding:12px 16px;background:#fdf5fb;border-radius:8px;border:1px solid var(--border);font-size:10px;color:var(--muted);line-height:1.8">
           <strong style="color:var(--purple);display:block;margin-bottom:4px">📅 Your confirmed schedule:</strong>
           <span style="color:var(--text);font-weight:700">Mon Apr 20 @ 12:00 PM EST</span> — Template 1 bi-weekly check-in sent to all active owners<br>
-          <span style="color:var(--text);font-weight:700">Tue Apr 21 @ 9:00 AM EST</span> — Template 2 follow-up sent the next morning<br>
           <span style="color:var(--text);font-weight:700">Every other week</span> — same days, same times (Apr 20/21, May 4/5, May 18/19…)<br>
           <span style="color:#ef4444;font-weight:700">Overdue alert (Template 3)</span> — fires automatically the day after any project's due date passes, every day, regardless of bi-weekly schedule
         </div>
@@ -804,7 +762,7 @@ tbody tr{animation:fadeUp .2s ease both}
       </div>
 
       <!-- Template copy boxes -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
         <div style="background:var(--white);border-radius:10px;padding:14px;border:1px solid var(--border)">
           <div style="font-size:10px;font-weight:800;color:var(--purple);margin-bottom:8px">Template 1 — Bi-weekly Check-in (Mon @ 12pm)</div>
           <div style="font-size:9px;color:var(--muted);margin-bottom:6px">Subject: <code style="background:#f3e8f1;padding:1px 4px;border-radius:4px">[gifthealth] Project Check-in — {{project_name}}</code></div>
@@ -827,26 +785,8 @@ Please take 2 minutes to update in the tracker:
 Thank you!
 {{from_name}} · gifthealth Operations</pre>
         </div>
-        <div style="background:var(--white);border-radius:10px;padding:14px;border:1px solid var(--border)">
-          <div style="font-size:10px;font-weight:800;color:#0369a1;margin-bottom:8px">Template 2 — Follow-up (Tue @ 9am)</div>
-          <div style="font-size:9px;color:var(--muted);margin-bottom:6px">Subject: <code style="background:#e0f2fe;padding:1px 4px;border-radius:4px">[gifthealth] Follow-up — {{project_name}}</code></div>
-          <pre style="font-size:9px;color:var(--text);background:#f8f5f9;padding:10px;border-radius:8px;white-space:pre-wrap;line-height:1.6;border:1px solid var(--border)">Hi {{to_name}},
-
-Following up on yesterday's check-in — did you get a chance to update your project status?
-
-Project: {{project_name}} (Task {{project_id}})
-Current Status: {{current_status}} · {{current_pct}} complete
-Due: {{due_date}}
-
-If there are any blockers or you need support, please add a note so the team has visibility.
-
-🔗 {{tracker_url}}
-
-Thank you!
-{{from_name}} · gifthealth Operations</pre>
-        </div>
         <div style="background:var(--white);border-radius:10px;padding:14px;border:1px solid var(--border);border-top:3px solid #ef4444">
-          <div style="font-size:10px;font-weight:800;color:#ef4444;margin-bottom:8px">Template 3 — Overdue Alert (day after due date)</div>
+          <div style="font-size:10px;font-weight:800;color:#ef4444;margin-bottom:8px">Template 2 — Overdue Alert (day after due date)</div>
           <div style="font-size:9px;color:var(--muted);margin-bottom:6px">Subject: <code style="background:#fde8e8;padding:1px 4px;border-radius:4px">[gifthealth] ⚠️ Overdue — {{project_name}}</code></div>
           <pre style="font-size:9px;color:var(--text);background:#f8f5f9;padding:10px;border-radius:8px;white-space:pre-wrap;line-height:1.6;border:1px solid var(--border)">Hi {{to_name}},
 
@@ -875,14 +815,47 @@ Please open the tracker and either:
       </div>
     </div>
   </div>
-  <div style="padding:20px 32px">
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;background:var(--white);padding:14px 16px;border-radius:12px;border:1px solid var(--border);align-items:center">
-      <div style="font-size:12px;font-weight:700;color:var(--text)">Filter:</div>
-      <select id="checkin-ws" class="fsel" onchange="renderCheckins()"><option value="">All Workstreams</option><option>Tech &amp; Engineering</option><option>Clinical &amp; Operations</option><option>Survey &amp; Research</option><option>Reporting &amp; Analytics</option></select>
-      <select id="checkin-status" class="fsel" onchange="renderCheckins()"><option value="">All Statuses</option><option>Not Started</option><option>In Progress</option><option>Blocked</option></select>
-      <button class="fbtn on" onclick="sendAllCheckins()" style="margin-left:auto">📧 Email All Owners</button>
+  <!-- Email coverage bar -->
+  <div id="email-coverage-bar" style="padding:12px 32px;background:var(--beige);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+    <div id="email-coverage-text" style="font-size:12px;font-weight:700;color:var(--text)">Checking email coverage…</div>
+    <div style="flex:1;height:8px;background:var(--border);border-radius:4px;min-width:120px;overflow:hidden">
+      <div id="email-coverage-fill" style="height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:4px;transition:width .4s"></div>
     </div>
-    <div id="checkin-cards" style="display:flex;flex-direction:column;gap:10px"></div>
+    <button onclick="syncEmailsFromDirectory()" class="fbtn" style="font-size:11px;white-space:nowrap">🔄 Sync Emails from Directory</button>
+    <button onclick="openMissingEmailsModal()" class="fbtn" id="fix-emails-btn" style="font-size:11px;color:#ef4444;border-color:#fca5a5;display:none">⚠️ Fix Missing Emails</button>
+  </div>
+
+  <div style="padding:20px 32px">
+    <!-- Filters + actions bar -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;background:var(--white);padding:12px 16px;border-radius:12px;border:1px solid var(--border);align-items:center">
+      <span style="font-size:11px;font-weight:700;color:var(--muted)">Filter:</span>
+      <select id="checkin-ws" class="fsel" onchange="renderCheckins()"><option value="">All Workstreams</option></select>
+      <select id="checkin-status" class="fsel" onchange="renderCheckins()"><option value="">All Statuses</option></select>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+        <span style="font-size:11px;color:var(--muted);font-style:italic">Emails send automatically on schedule · configure in EmailJS setup above</span>
+      </div>
+    </div>
+
+    <!-- Project cards -->
+    <div id="checkin-cards" style="display:flex;flex-direction:column;gap:8px"></div>
+  </div>
+</div>
+
+<!-- MISSING EMAILS MODAL -->
+<div class="modal-bg" id="missing-emails-modal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-hdr">
+      <button class="modal-close" onclick="document.getElementById('missing-emails-modal').classList.remove('open')">✕</button>
+      <h2>Add Missing Emails</h2>
+      <p>These project owners have no email — add them here or in the Directory</p>
+    </div>
+    <div class="modal-body">
+      <div id="missing-emails-list" style="display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-sec" onclick="document.getElementById('missing-emails-modal').classList.remove('open')">Close</button>
+      <button class="btn-pri" onclick="saveMissingEmails()">💾 Save All Emails</button>
+    </div>
   </div>
 </div>
 
@@ -1179,24 +1152,24 @@ let AUDIT_LOG = [];
 
 // Directory
 let DIRECTORY = [
-  {id:'d1',name:'Tim Langston',email:'',title:'',team:'Survey & Research',role:'Owner',color:'#440B39',notes:''},
-  {id:'d2',name:'Haley Mitchell',email:'',title:'',team:'Tech & Engineering',role:'Owner',color:'#FF764D',notes:''},
-  {id:'d3',name:'Paige Dorne',email:'',title:'',team:'Tech & Engineering',role:'Co-owner',color:'#DC5AEE',notes:''},
-  {id:'d4',name:'Steve Goslin',email:'',title:'',team:'Tech & Engineering',role:'Owner',color:'#0369a1',notes:''},
-  {id:'d5',name:'Elizabeth Gilbert',email:'',title:'',team:'Clinical & Operations',role:'Owner',color:'#10b981',notes:''},
-  {id:'d6',name:'Crys Smith',email:'',title:'',team:'Reporting & Analytics',role:'Owner',color:'#7c5c76',notes:''},
-  {id:'d7',name:'Sarah Bergstrom',email:'',title:'',team:'Reporting & Analytics',role:'Co-owner',color:'#440B39',notes:''},
-  {id:'d8',name:'Todd Zevchick',email:'',title:'',team:'Clinical & Operations',role:'Owner',color:'#FF764D',notes:''},
-  {id:'d9',name:'Amy S',email:'',title:'',team:'Clinical & Operations',role:'Owner',color:'#DC5AEE',notes:''},
-  {id:'d10',name:'Ross Wilson',email:'',title:'',team:'Reporting & Analytics',role:'Owner',color:'#0369a1',notes:''},
-  {id:'d11',name:'Matthew Pacanovsky',email:'',title:'',team:'Clinical & Operations',role:'Owner',color:'#10b981',notes:''},
-  {id:'d12',name:'QueYani Dawson',email:'',title:'',team:'Reporting & Analytics',role:'Owner',color:'#7c5c76',notes:''},
-  {id:'d13',name:'Madi Peugh',email:'',title:'',team:'Tech & Engineering',role:'Owner',color:'#440B39',notes:''},
-  {id:'d14',name:'Brandon Haas',email:'',title:'',team:'Tech & Engineering',role:'Co-owner',color:'#FF764D',notes:''},
-  {id:'d15',name:'Shawn Leitner',email:'',title:'',team:'Tech & Engineering',role:'Owner',color:'#DC5AEE',notes:''},
-  {id:'d16',name:'Kacia Nolan',email:'',title:'',team:'Clinical & Operations',role:'Co-owner',color:'#0369a1',notes:''},
-  {id:'d17',name:'Serena Mitts',email:'',title:'Operations Lead',team:'Operations',role:'Sponsor',color:'#2E0326',notes:'Primary sponsor for most projects'},
-  {id:'d18',name:'Joel Pagan',email:'',title:'',team:'Reporting & Analytics',role:'Sponsor',color:'#0369a1',notes:'Sponsor for WFM projects'},
+  {id:'d1',name:'Tim Langston',email:'',title:'',team:'Survey & Research',color:'#440B39',notes:''},
+  {id:'d2',name:'Haley Mitchell',email:'',title:'',team:'Tech & Engineering',color:'#FF764D',notes:''},
+  {id:'d3',name:'Paige Dorne',email:'',title:'',team:'Tech & Engineering',color:'#DC5AEE',notes:''},
+  {id:'d4',name:'Steve Goslin',email:'',title:'',team:'Tech & Engineering',color:'#0369a1',notes:''},
+  {id:'d5',name:'Elizabeth Gilbert',email:'',title:'',team:'Clinical & Operations',color:'#10b981',notes:''},
+  {id:'d6',name:'Crys Smith',email:'',title:'',team:'Reporting & Analytics',color:'#7c5c76',notes:''},
+  {id:'d7',name:'Sarah Bergstrom',email:'',title:'',team:'Reporting & Analytics',color:'#440B39',notes:''},
+  {id:'d8',name:'Todd Zevchick',email:'',title:'',team:'Clinical & Operations',color:'#FF764D',notes:''},
+  {id:'d9',name:'Amy S',email:'',title:'',team:'Clinical & Operations',color:'#DC5AEE',notes:''},
+  {id:'d10',name:'Ross Wilson',email:'',title:'',team:'Reporting & Analytics',color:'#0369a1',notes:''},
+  {id:'d11',name:'Matthew Pacanovsky',email:'',title:'',team:'Clinical & Operations',color:'#10b981',notes:''},
+  {id:'d12',name:'QueYani Dawson',email:'',title:'',team:'Reporting & Analytics',color:'#7c5c76',notes:''},
+  {id:'d13',name:'Madi Peugh',email:'',title:'',team:'Tech & Engineering',color:'#440B39',notes:''},
+  {id:'d14',name:'Brandon Haas',email:'',title:'',team:'Tech & Engineering',color:'#FF764D',notes:''},
+  {id:'d15',name:'Shawn Leitner',email:'',title:'',team:'Tech & Engineering',color:'#DC5AEE',notes:''},
+  {id:'d16',name:'Kacia Nolan',email:'',title:'',team:'Clinical & Operations',color:'#0369a1',notes:''},
+  {id:'d17',name:'Serena Mitts',email:'',title:'Operations Lead',team:'Operations',color:'#2E0326',notes:'Primary sponsor for most projects'},
+  {id:'d18',name:'Joel Pagan',email:'',title:'',team:'Reporting & Analytics',color:'#0369a1',notes:'Sponsor for WFM projects'},
 ];
 
 // Settings — all configurable lists
@@ -1266,6 +1239,12 @@ function switchTab(tab, el){
   if(tab==='audit') renderAuditLog();
   if(tab==='settings') renderSettings();
   if(tab==='directory') renderDirectory();
+}
+
+// Switch tab by id without needing a button element reference
+function switchTabById(tab){
+  const btn=document.querySelector(`.nav-tab[onclick*="'${tab}'"]`);
+  if(btn) switchTab(tab,btn);
 }
 
 // ════════════════════════════════════════════════
@@ -1964,42 +1943,119 @@ function checkArchivePrompt(id){
 }
 
 // ════════════════════════════════════════════════
-// CHECK-INS
+// EMAIL STATUS (formerly Check-ins)
 // ════════════════════════════════════════════════
 function renderCheckins(){
-  const ws=document.getElementById('checkin-ws').value;
-  const st=document.getElementById('checkin-status').value;
+  const ws=(document.getElementById('checkin-ws')||{}).value||'';
+  const st=(document.getElementById('checkin-status')||{}).value||'';
   const mains=PROJECTS.filter(p=>{
-    if(p.isSubtask) return false;
-    if(p.status==='Done') return false;
+    if(p.isSubtask||p.status==='Done') return false;
     if(ws&&p.workstream!==ws) return false;
     if(st&&p.status!==st) return false;
     return true;
   });
+
   const container=document.getElementById('checkin-cards');
+  if(!container) return;
+
   if(!mains.length){
-    container.innerHTML=`<div class="empty"><div class="empty-icon">📧</div><div style="font-weight:800;font-size:15px">No active projects match</div></div>`;
+    container.innerHTML=`<div class="empty"><div class="empty-icon">📬</div><div style="font-weight:800;font-size:15px">No active projects match</div></div>`;
     return;
   }
+
   container.innerHTML=mains.map(p=>{
-    const lastCheckin=AUDIT_LOG.find(e=>e.projectId===p.id&&e.action==='checkin');
-    const lastDate=lastCheckin?new Date(lastCheckin.ts).toLocaleDateString([],{month:'short',day:'numeric'}):'Never';
+    // Pull all email events for this project from audit log
+    const emailEvents=AUDIT_LOG.filter(e=>e.projectId===p.id&&e.action==='checkin'&&e.field.includes('email'));
+    const lastEvent=emailEvents[0]; // newest first
+    const lastCheckinEvent=AUDIT_LOG.find(e=>e.projectId===p.id&&e.action==='checkin'&&e.field==='email');
+    const lastOverdueEvent=AUDIT_LOG.find(e=>e.projectId===p.id&&e.action==='checkin'&&e.field.includes('overdue'));
+    const lastUpdateEvent=AUDIT_LOG.find(e=>e.projectId===p.id&&e.action==='checkin'&&e.field==='status');
+
+    // Format timestamps
+    function fmtTs(ts){
+      if(!ts) return null;
+      const d=new Date(ts);
+      const now=new Date();
+      const diffMs=now-d;
+      const diffDays=Math.floor(diffMs/(1000*60*60*24));
+      const time=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      const date=d.toLocaleDateString([],{month:'short',day:'numeric'});
+      if(diffDays===0) return `Today at ${time}`;
+      if(diffDays===1) return `Yesterday at ${time}`;
+      if(diffDays<7) return `${diffDays} days ago (${date})`;
+      return date;
+    }
+
+    const lastEmailTs=lastEvent?fmtTs(lastEvent.ts):null;
+    const lastEmailTo=lastEvent?(lastEvent.newVal||p.owner):null;
+    const lastEmailType=lastEvent?(
+      lastEvent.field.includes('overdue')?'Overdue Alert':
+      lastEvent.field.includes('alert')?'Alert':
+'Check-in'
+    ):null;
+
+    const lastUpdateTs=lastUpdateEvent?fmtTs(lastUpdateEvent.ts):null;
+
+    // Days color
     const daysColor=p.days===null?'var(--muted)':p.days<0?'#ef4444':p.days<=15?'var(--orange)':'#166534';
-    return `<div class="checkin-card">
-      <div class="checkin-info">
-        <div class="checkin-name">${esc(p.name)}</div>
+    const isOverdue=p.days!==null&&p.days<0;
+    const isBlocked=p.status==='Blocked';
+
+    // Email status indicator
+    const ownerEmail=p.ownerEmail||(DIRECTORY.find(d=>d.name===p.owner)||{}).email||'';
+    const hasEmail=!!ownerEmail;
+
+    return `<div class="checkin-card" style="cursor:pointer" onclick="openDrawer(PROJECTS.find(x=>x.id==='${p.id}'))">
+      <!-- Left: project info -->
+      <div class="checkin-info" style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+          <div class="checkin-name">${esc(p.name)}</div>
+          ${isOverdue?`<span style="background:#fde8e8;color:#ef4444;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px">OVERDUE</span>`:''}
+          ${isBlocked?`<span style="background:#fde8e8;color:#c0392b;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px">BLOCKED</span>`:''}
+        </div>
         <div class="checkin-meta">
           ${wbadge(p.workstream)}
           ${sbadge(p.status)}
           ${pbadge(p.priority)}
           <span style="display:inline-flex;align-items:center;gap:4px">${chip(p.owner)}</span>
-          <span style="font-size:10px;color:var(--muted)">Last check-in: <strong>${lastDate}</strong></span>
-          ${p.due?`<span style="font-size:10px;color:${daysColor};font-weight:700">Due: ${p.due}</span>`:''}
+          ${p.due?`<span style="font-size:10px;color:${daysColor};font-weight:700">Due: ${p.due}${p.days!==null?' ('+Math.abs(p.days)+'d '+(p.days<0?'overdue':'left')+')':''}</span>`:'<span style="font-size:10px;color:var(--muted)">No due date</span>'}
+        </div>
+        <!-- Progress -->
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+          <div class="prog-bar" style="flex:1;max-width:160px"><div class="prog-fill" style="width:${p.pct}%"></div></div>
+          <span style="font-size:10px;font-weight:700;color:var(--muted)">${p.pct}% complete</span>
         </div>
       </div>
-      <div class="checkin-actions">
-        <button class="ci-btn ci-send" data-send-id="${p.id}" onclick="sendCheckin('${p.id}')">📧 Send Email</button>
-        <button class="ci-btn ci-update" onclick="openCheckinModal('${p.id}')">✏️ Update Now</button>
+
+      <!-- Right: email history -->
+      <div style="min-width:220px;border-left:1px solid var(--border);padding-left:16px;display:flex;flex-direction:column;gap:8px">
+        <!-- Last email sent -->
+        <div>
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:3px">Last Email Sent</div>
+          ${lastEmailTs
+            ? `<div style="font-size:12px;font-weight:700;color:var(--text)">${lastEmailTs}</div>
+               <div style="font-size:10px;color:var(--muted);margin-top:1px">
+                 <span style="background:${lastEmailType==='Overdue Alert'?'#fde8e8':lastEmailType==='Follow-up'?'#e0f2fe':'#ede9fe'};color:${lastEmailType==='Overdue Alert'?'#c0392b':lastEmailType==='Follow-up'?'#0369a1':'#5b21b6'};padding:1px 6px;border-radius:6px;font-weight:700;font-size:9px">${lastEmailType}</span>
+                 → ${esc(lastEmailTo||p.owner)}
+               </div>`
+            : `<div style="font-size:11px;color:var(--muted);font-style:italic">No email sent yet</div>`
+          }
+        </div>
+        <!-- Last status update -->
+        <div>
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:3px">Last Status Update</div>
+          ${lastUpdateTs
+            ? `<div style="font-size:12px;font-weight:700;color:var(--text)">${lastUpdateTs}</div>`
+            : `<div style="font-size:11px;color:var(--muted);font-style:italic">No updates recorded</div>`
+          }
+        </div>
+        <!-- Email address status -->
+        <div style="margin-top:2px">
+          ${hasEmail
+            ? `<span style="background:#dcfce7;color:#166534;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px">✉ ${esc(ownerEmail)}</span>`
+            : `<span style="background:#fde8e8;color:#ef4444;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;cursor:pointer" onclick="event.stopPropagation();switchTabById('directory')">⚠ No email — add in Directory</span>`
+          }
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -2380,15 +2436,17 @@ document.addEventListener('mousemove',function(e){
 // EMAILJS CONFIG — 2 TEMPLATES + SCHEDULER
 // ════════════════════════════════════════════════
 var EJS={
-  publicKey:'', serviceId:'', fromEmail:'', enabled:false,
-  templateId:'',    // Template 1: bi-weekly check-in (Mon @ 12pm)
-  template2Id:'',   // Template 2: follow-up (Tue @ 9am)
-  template3Id:'',   // Template 3: overdue alert (day after due date)
-  anchorDate:'2026-04-20', // Monday of first send week
+  publicKey:'_3N-HEbcSUx58VAWn',
+  serviceId:'service_fgowsma',
+  fromEmail:'',       // user fills in their work email
+  enabled:false,      // becomes true once user saves with their email
+  templateId:'template_kd4kons',   // Template 1: bi-weekly check-in (Mon @ 12pm)
+  template3Id:'template_sosw7rp',  // Template 3: overdue alert (day after due date)
+  anchorDate:'2026-04-20',         // Monday of first send week
   checkinDay:1,     // 1=Mon
   checkinTime:12,   // 12pm EST
-  alertDay:2,       // 2=Tue
-  alertTime:9,      // 9am EST
+  alertDay:0,       // follow-up disabled
+  alertTime:9,
   alertFilter:'all'
 };
 
@@ -2398,45 +2456,44 @@ function loadEmailJSConfig(){
     if(saved){
       const parsed=JSON.parse(saved);
       EJS={...EJS,...parsed};
-      if(EJS.publicKey&&EJS.serviceId&&EJS.templateId){
-        emailjs.init(EJS.publicKey);
-        EJS.enabled=true;
-      }
+    }
+  }catch(e){}
+  // Always init with pre-filled keys — only need email to fully enable
+  try{
+    if(EJS.publicKey&&EJS.serviceId&&EJS.templateId){
+      emailjs.init(EJS.publicKey);
+      if(EJS.fromEmail) EJS.enabled=true;
     }
   }catch(e){}
   updateEJSBanner();
-  // Run scheduler check on load
   if(EJS.enabled) runScheduledEmails();
 }
 
 function saveEmailJSConfig(){
-  EJS.publicKey    = document.getElementById('ejs-public-key').value.trim();
-  EJS.serviceId    = document.getElementById('ejs-service-id').value.trim();
-  EJS.templateId   = document.getElementById('ejs-template-id').value.trim();
-  EJS.template2Id  = document.getElementById('ejs-template2-id').value.trim();
-  EJS.fromEmail    = document.getElementById('ejs-from-email').value.trim();
-  EJS.template3Id  = (document.getElementById('ejs-template3-id')||{}).value?.trim()||'';
-  EJS.anchorDate   = document.getElementById('ejs-anchor-date').value||'2026-04-20';
-  EJS.checkinDay   = parseInt(document.getElementById('ejs-checkin-day').value)||1;
-  EJS.checkinTime  = parseInt(document.getElementById('ejs-checkin-time').value)||12;
-  EJS.alertDay     = parseInt(document.getElementById('ejs-alert-day').value)||2;
-  EJS.alertTime    = parseInt((document.getElementById('ejs-alert-time')||{}).value)||9;
-  EJS.alertFilter  = document.getElementById('ejs-alert-filter').value;
+  // Pre-filled values — only email needs to come from the user
+  EJS.publicKey   = document.getElementById('ejs-public-key').value.trim()||EJS.publicKey;
+  EJS.serviceId   = document.getElementById('ejs-service-id').value.trim()||EJS.serviceId;
+  EJS.templateId  = document.getElementById('ejs-template-id').value.trim()||EJS.templateId;
+  EJS.template3Id = document.getElementById('ejs-template3-id').value.trim()||EJS.template3Id;
+  EJS.fromEmail   = document.getElementById('ejs-from-email').value.trim();
+  EJS.anchorDate  = document.getElementById('ejs-anchor-date').value||'2026-04-20';
+  EJS.checkinDay  = parseInt(document.getElementById('ejs-checkin-day').value)||1;
+  EJS.checkinTime = parseInt(document.getElementById('ejs-checkin-time').value)||12;
+  EJS.alertDay    = 0;  // follow-up disabled
 
-  if(!EJS.publicKey||!EJS.serviceId||!EJS.templateId){
-    document.getElementById('ejs-status').innerHTML='<span style="color:#ef4444">⚠ Public Key, Service ID, and Template 1 ID are required</span>';
+  if(!EJS.fromEmail){
+    document.getElementById('ejs-status').innerHTML='<span style="color:#ef4444">⚠ Please enter your work email address</span>';
     return;
   }
   try{
     emailjs.init(EJS.publicKey);
     EJS.enabled=true;
     localStorage.setItem('gh_ejs_config',JSON.stringify(EJS));
-    const st=document.getElementById('ejs-status');
-    st.innerHTML='<span style="color:#10b981;font-weight:700">✅ Saved! Sending test email…</span>';
+    document.getElementById('ejs-status').innerHTML='<span style="color:#10b981;font-weight:700">✅ All set! Sending test email to you now…</span>';
     sendTestEmail();
     updateEJSBanner();
     updateNextSendPreview();
-    setTimeout(()=>{ if(document.getElementById('emailjs-setup-panel').style.display!=='none') toggleEmailJSSetup(); },2000);
+    setTimeout(()=>{ if(document.getElementById('emailjs-setup-panel').style.display!=='none') toggleEmailJSSetup(); },2500);
   }catch(e){
     document.getElementById('ejs-status').innerHTML=`<span style="color:#ef4444">❌ Error: ${e.message}</span>`;
   }
@@ -2472,7 +2529,7 @@ function toggleEmailJSSetup(){
     const fields={
       'ejs-public-key':EJS.publicKey,'ejs-service-id':EJS.serviceId,
       'ejs-from-email':EJS.fromEmail,'ejs-template-id':EJS.templateId,
-      'ejs-template2-id':EJS.template2Id,'ejs-template3-id':EJS.template3Id||'',
+'ejs-template3-id':EJS.template3Id||'',
       'ejs-anchor-date':EJS.anchorDate||'2026-04-20'
     };
     Object.entries(fields).forEach(([id,val])=>{
@@ -2480,14 +2537,8 @@ function toggleEmailJSSetup(){
     });
     const cd=document.getElementById('ejs-checkin-day');
     const ct=document.getElementById('ejs-checkin-time');
-    const ad=document.getElementById('ejs-alert-day');
-    const at2=document.getElementById('ejs-alert-time');
-    const af=document.getElementById('ejs-alert-filter');
     if(cd) cd.value=EJS.checkinDay||1;
     if(ct) ct.value=EJS.checkinTime||12;
-    if(ad) ad.value=EJS.alertDay||2;
-    if(at2) at2.value=EJS.alertTime||9;
-    if(af) af.value=EJS.alertFilter||'all';
     updateNextSendPreview();
   } else {
     panel.style.display='none';
@@ -2502,10 +2553,9 @@ function updateEJSBanner(){
     banner.style.background='linear-gradient(135deg,#065f46,#10b981)';
     const dayNames=['','Mon','Tue','Wed','Thu','Fri'];
     const t1=EJS.checkinDay?`📋 ${dayNames[EJS.checkinDay]} @ ${EJS.checkinTime}:00 bi-weekly`:'Check-in: off';
-    const t2=EJS.alertDay?`📩 ${dayNames[EJS.alertDay]} @ ${EJS.alertTime||9}:00 bi-weekly`:'Follow-up: off';
     const t3=EJS.template3Id?'⚠️ Overdue auto-alert ON':'';
     banner.querySelector('div div:first-child').textContent=`✅ EmailJS Active — Sending from ${EJS.fromEmail||'your email'}`;
-    banner.querySelector('div div:last-child').textContent=`${t1} · ${t2}${t3?' · '+t3:''}`;
+    banner.querySelector('div div:last-child').textContent=`${t1}${t3?' · '+t3:''}`;
   }
 }
 
@@ -2537,7 +2587,6 @@ function updateNextSendPreview(){
   }
 
   const nextCheckin=EJS.checkinDay?nextOccurrence(EJS.checkinDay,today):null;
-  const nextFollowup=EJS.alertDay?nextOccurrence(EJS.alertDay,nextCheckin||today):null;
 
   // Overdue check — any projects past due
   const overdueProjects=PROJECTS.filter(p=>!p.isSubtask&&p.status!=='Done'&&p.days!==null&&p.days<0&&p.ownerEmail&&EJS.template3Id);
@@ -2545,7 +2594,6 @@ function updateNextSendPreview(){
   const lines=[
     `<div style="display:flex;flex-direction:column;gap:6px">`,
     `<div><span style="color:var(--purple);font-weight:700">📋 Next check-in:</span> ${fmt(nextCheckin,EJS.checkinTime||12)}</div>`,
-    `<div><span style="color:#0369a1;font-weight:700">📩 Next follow-up:</span> ${fmt(nextFollowup,EJS.alertTime||9)}</div>`,
     EJS.template3Id
       ? `<div><span style="color:#ef4444;font-weight:700">⚠ Overdue alerts:</span> ${overdueProjects.length} project${overdueProjects.length!==1?'s':''} currently overdue ${overdueProjects.length?'— alerts will fire next page load':'— none pending'}</div>`
       : `<div style="color:var(--muted)">⚠ Overdue alert (Template 3): not configured</div>`,
@@ -2592,17 +2640,6 @@ function runScheduledEmails(){
     }
   }
 
-  // ── Template 2: bi-weekly follow-up (Tue @ 9am) ──
-  if(EJS.alertDay && EJS.template2Id && dow===EJS.alertDay && isSendWeek(dateStr)){
-    const key = 'followup_'+dateStr;
-    if(!lastSent[key] && now.getHours()>=(EJS.alertTime||9)){
-      console.log('[gifthealth] Bi-weekly follow-up batch firing…');
-      scheduleFollowupBatch();
-      lastSent[key] = now.toISOString();
-      localStorage.setItem('gh_last_sent',JSON.stringify(lastSent));
-    }
-  }
-
   // ── Template 3: overdue alert — fires day after due date, every day ──
   if(EJS.template3Id){
     checkOverdueAlerts(dateStr, lastSent);
@@ -2634,41 +2671,6 @@ function scheduleCheckinBatch(){
   auditLog('SYSTEM','Scheduled','checkin','bi-weekly-batch','—',`Bi-weekly check-in sent to ${active.length} owners`);
 }
 
-function scheduleFollowupBatch(){
-  const active = PROJECTS.filter(p=>!p.isSubtask && p.status!=='Done' && p.ownerEmail);
-  if(!active.length) return;
-  // filter by alertFilter setting
-  const targets = EJS.alertFilter==='all' ? active : active.filter(p=>{
-    if(EJS.alertFilter==='blocked') return p.status==='Blocked';
-    if(EJS.alertFilter==='overdue') return p.days!==null&&p.days<0;
-    return p.status==='Blocked'||(p.days!==null&&p.days<0);
-  });
-  if(!targets.length){ showToast('ℹ No projects match follow-up filter today'); return; }
-  targets.forEach((p,i) => setTimeout(()=>sendFollowupEmail(p), i*700));
-  showToast(`📩 Sending ${targets.length} follow-up email${targets.length>1?'s':''}…`);
-  auditLog('SYSTEM','Scheduled','checkin','followup-batch','—',`Follow-up sent to ${targets.length} owners`);
-}
-
-function sendFollowupEmail(p){
-  if(!EJS.template2Id) return;
-  emailjs.send(EJS.serviceId, EJS.template2Id, {
-    to_email: p.ownerEmail,
-    to_name: p.owner||'Team Member',
-    from_name: EJS.fromEmail.split('@')[0]||'Dom London',
-    project_name: p.name,
-    project_id: p.id,
-    current_status: p.status,
-    current_pct: p.pct+'%',
-    workstream: p.workstream,
-    due_date: p.due||'TBD',
-    tracker_url: window.location.href,
-    message: 'Following up — please update your project status when you get a chance.'
-  }).then(()=>{
-    auditLog(p.id,p.name,'checkin','followup-email','—',`Follow-up email sent to ${p.ownerEmail}`);
-    save();
-  }).catch(err=>console.error('Follow-up failed for',p.id,err));
-}
-
 function sendOverdueEmail(p){
   if(!EJS.template3Id) return;
   emailjs.send(EJS.serviceId, EJS.template3Id, {
@@ -2689,16 +2691,6 @@ function sendOverdueEmail(p){
     save();
     showToast(`⚠ Overdue alert sent for "${p.name}"`);
   }).catch(err=>console.error('Overdue email failed for',p.id,err));
-}
-
-function scheduleAlertBatch(){
-  // Legacy shim — calls new follow-up batch
-  scheduleFollowupBatch();
-}
-
-function sendAlertEmail(p){
-  // Legacy shim — calls new follow-up
-  sendFollowupEmail(p);
 }
 
 // ════════════════════════════════════════════════
@@ -2820,7 +2812,7 @@ function refreshAllDropdowns(){
   const statuses   = SETTINGS.statuses.map(s=>s.label);
   const workstreams= SETTINGS.workstreams.map(s=>s.label);
   const priorities = SETTINGS.priorities.map(s=>s.label);
-  const sponsors   = DIRECTORY.filter(p=>p.role&&p.role.includes('Sponsor')).map(p=>p.name);
+  const sponsors   = DIRECTORY.map(p=>p.name); // all directory people available as sponsors
 
   function repopulate(el,opts,curVal){
     if(!el) return;
@@ -2947,7 +2939,7 @@ function renderDirectory(){
 
   let filtered=DIRECTORY.filter(p=>{
     const ms=!search||(p.name||'').toLowerCase().includes(search)||(p.email||'').toLowerCase().includes(search)||(p.title||'').toLowerCase().includes(search)||(p.team||'').toLowerCase().includes(search);
-    const mf=_dirFilter==='all'||(p.role||'').includes(_dirFilter);
+    const mf=true; // role filter removed — roles assigned per project
     const mt=!teamFilter||p.team===teamFilter;
     return ms&&mf&&mt;
   });
@@ -2970,19 +2962,12 @@ function renderDirectory(){
     });
   });
 
-  // Role badge styles
-  const roleStyle={
-    'Owner':'background:#ede9fe;color:#5b21b6',
-    'Co-owner':'background:var(--beige);color:var(--muted)',
-    'Sponsor':'background:linear-gradient(135deg,var(--purple-xd),var(--purple));color:#fff',
-    'Owner & Sponsor':'background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff',
-  };
+
 
   grid.innerHTML=filtered.map(p=>{
     const color=p.color||'#440B39';
     const inits=initials(p.name);
     const pc=projCounts[p.name]||0;
-    const rStyle=roleStyle[p.role]||roleStyle['Owner'];
     return `<div class="dir-card" onclick="openDirModal('${p.id}')">
       <div class="dir-card-accent" style="background:${color}"></div>
       <div style="display:flex;align-items:flex-start;gap:12px">
@@ -2994,10 +2979,7 @@ function renderDirectory(){
         </div>
       </div>
       ${p.email?`<div class="dir-email">✉️ <a href="mailto:${esc(p.email)}" onclick="event.stopPropagation()" style="color:var(--purple);text-decoration:none">${esc(p.email)}</a></div>`:'<div class="dir-email" style="color:var(--muted);font-style:italic">✉️ No email — add for check-ins</div>'}
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
-        <span class="dir-role-badge" style="${rStyle}">${esc(p.role)}</span>
-        ${pc>0?`<span style="font-size:10px;color:var(--muted)">${pc} project${pc!==1?'s':''}</span>`:''}
-      </div>
+      ${pc>0?`<div style="font-size:10px;color:var(--muted);margin-top:6px">${pc} active project${pc!==1?'s':''}</div>`:''}
       ${p.notes?`<div style="font-size:10px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);line-height:1.4;font-style:italic">${esc(p.notes)}</div>`:''}
       <div class="dir-actions">
         <button class="row-btn edit-btn" onclick="event.stopPropagation();openDirModal('${p.id}')">Edit</button>
@@ -3028,7 +3010,7 @@ function openDirModal(id){
   document.getElementById('dp-email').value=p?(p.email||''):'';
   document.getElementById('dp-title').value=p?(p.title||''):'';
   document.getElementById('dp-team').value=p?(p.team||''):'';
-  document.getElementById('dp-role').value=p?(p.role||'Owner'):'Owner';
+
   document.getElementById('dp-color').value=p?(p.color||'#440B39'):'#440B39';
   document.getElementById('dp-notes').value=p?(p.notes||''):'';
   // populate team datalist
@@ -3051,7 +3033,6 @@ function saveDirPerson(){
     email:document.getElementById('dp-email').value.trim(),
     title:document.getElementById('dp-title').value.trim(),
     team:document.getElementById('dp-team').value.trim(),
-    role:document.getElementById('dp-role').value,
     color:document.getElementById('dp-color').value,
     notes:document.getElementById('dp-notes').value.trim(),
   };
@@ -3099,8 +3080,6 @@ function sendCheckinToEmail(dirId){
 
 // Sync directory people into owner/sponsor dropdowns
 function refreshDirectoryDropdowns(){
-  const owners=DIRECTORY.filter(p=>p.role.includes('Owner')).map(p=>p.name);
-  const sponsors=DIRECTORY.filter(p=>p.role.includes('Sponsor')).map(p=>p.name);
   const all=DIRECTORY.map(p=>p.name);
 
   // Modal owner datalist (convert to datalist for typeahead)
